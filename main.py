@@ -25,7 +25,7 @@ model = genai.GenerativeModel(
     system_instruction=(
         "You are a model built for the users of a startup that wants you to give personalized "
         "suggestions on events like color schemes, seating arrangements, budget aspects, and current "
-        "trends for more reach based on the user's input."
+        "trends for more reach based on the user's input dont ask any questions to the user."
     ),
 )
 
