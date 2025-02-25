@@ -6,7 +6,7 @@ import google.generativeai as genai
 st.set_page_config(page_title="Event Planning Chatbot", layout="centered")
 
 # Set up the Google AI environment
-os.environ["GEMINI_API_KEY"] = "Your_API_Key"
+os.environ["GEMINI_API_KEY"] = "AIzaSyDtd8ew9QCQsvy2BOV1SRYYF2gCkhoYzKg"
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 # Define the generation configuration
