@@ -20,7 +20,7 @@ generation_config = {
 
 # Initialize the generative model
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-pro",
+    model_name="gemini-2.0-flash-lite",
     generation_config=generation_config,
     system_instruction=(
         "You are a model built for the users of a startup that wants you to give personalized "
