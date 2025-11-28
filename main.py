@@ -3,11 +3,11 @@ from groq import Groq
 
 st.set_page_config(page_title="Event Suggestion AI", layout="wide")
 
-# ---- API KEY ----
-GROQ_API_KEY = "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"
+# ---- LOAD API KEY FROM SECRETS ----
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=GROQ_API_KEY)
 
-st.title("MakeYourDream")
+st.title("🎉 Event Suggestion AI (Groq + Streamlit)")
 
 user_input = st.text_area("Enter event details (theme, type, location, audience, etc.)")
 
@@ -46,5 +46,3 @@ if st.button("Generate Suggestions"):
             content = chunk.choices[0].delta.content or ""
             result += content
             response_area.markdown(result)
-
-
