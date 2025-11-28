@@ -1,46 +1,48 @@
-import os
 import streamlit as st
-import google.generativeai as genai
+from groq import Groq
 
-# Set up the Streamlit page configuration
-st.set_page_config(page_title="Event Planning Chatbot", layout="centered")
+st.set_page_config(page_title="Event Suggestion AI", layout="wide")
 
-# Set up the Google AI environment
-os.environ["GEMINI_API_KEY"] = "AIzaSyA04SDintKYC9tOBD_1u20x_YAK2pAR_qQ"
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+# ---- API KEY ----
+GROQ_API_KEY = "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"
+client = Groq(api_key=GROQ_API_KEY)
 
-# Define the generation configuration
-generation_config = {
-    "temperature": 1,
-    "top_p": 0.95,
-    "top_k": 64,
-    "max_output_tokens": 8192,
-    "response_mime_type": "text/plain",
-}
+st.title("🎉 Event Suggestion AI (Groq + Streamlit)")
 
-# Initialize the generative model
-model = genai.GenerativeModel(
-    model_name="gemini-2.0-flash-lite",
-    generation_config=generation_config,
-    system_instruction=(
-        "You are a model built for the users of a startup that wants you to give personalized "
-        "suggestions on events like color schemes, seating arrangements, budget aspects, and current "
-        "trends for more reach based on the user's input dont ask any questions to the user."
-    ),
-)
+user_input = st.text_area("Enter event details (theme, type, location, audience, etc.)")
 
-# Start a chat session
-chat_session = model.start_chat(history=[])
+if st.button("Generate Suggestions"):
+    if not user_input.strip():
+        st.warning("Enter something.")
+    else:
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "You are a model built for a startup that wants you to give personalized "
+                    "suggestions on events like color schemes, seating arrangements, budget aspects, "
+                    "and current trends for more reach based on the user's input. "
+                    "Do NOT ask the user questions."
+                ),
+            },
+            {"role": "user", "content": user_input},
+        ]
 
-# Streamlit app layout
-st.title("Event Planning Chatbot")
-st.write("Get personalized suggestions for your event!")
+        response_area = st.empty()
+        result = ""
 
-# User input
-user_input = st.text_input("Enter your question or event details:")
+        completion = client.chat.completions.create(
+            model="openai/gpt-oss-20b",
+            messages=messages,
+            temperature=1,
+            max_completion_tokens=8192,
+            top_p=1,
+            reasoning_effort="medium",
+            stream=True,
+            stop=None,
+        )
 
-# Chatbot response
-if user_input:
-    response = chat_session.send_message(user_input)
-    st.write("Chatbot Response:")
-    st.write(response.text)
+        for chunk in completion:
+            content = chunk.choices[0].delta.content or ""
+            result += content
+            response_area.markdown(result)
