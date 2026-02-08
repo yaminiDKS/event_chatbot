@@ -3,13 +3,27 @@ from groq import Groq
 
 st.set_page_config(page_title="Event Suggestion AI", layout="wide")
 
+# ---- TOP BAR WITH REDIRECT BUTTON ----
+top_left, top_right = st.columns([6, 1])
+
+with top_right:
+    if st.button("Vendor Recommendation"):
+        st.markdown(
+            """
+            <meta http-equiv="refresh" content="0; url=https://vendor-recommendation-chatbot-jtmxjffyqsp4qxwtfu9dql.streamlit.app/">
+            """,
+            unsafe_allow_html=True,
+        )
+
 # ---- LOAD API KEY FROM SECRETS ----
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=GROQ_API_KEY)
 
 st.title("MakeYourDream")
 
-user_input = st.text_area("Enter event details (theme, type, location, audience, etc.)")
+user_input = st.text_area(
+    "Enter event details (theme, type, location, audience, etc.)"
+)
 
 if st.button("Generate Suggestions"):
     if not user_input.strip():
@@ -46,4 +60,3 @@ if st.button("Generate Suggestions"):
             content = chunk.choices[0].delta.content or ""
             result += content
             response_area.markdown(result)
-
