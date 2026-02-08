@@ -3,17 +3,15 @@ from groq import Groq
 
 st.set_page_config(page_title="Event Suggestion AI", layout="wide")
 
-# ---- TOP BAR WITH REDIRECT BUTTON ----
-top_left, top_right = st.columns([6, 1])
+# ---- TOP BAR ----
+left, right = st.columns([6, 1])
 
-with top_right:
-    if st.button("Vendor Recommendation"):
-        st.markdown(
-            """
-            <meta http-equiv="refresh" content="0; url=https://vendor-recommendation-chatbot-jtmxjffyqsp4qxwtfu9dql.streamlit.app/">
-            """,
-            unsafe_allow_html=True,
-        )
+with right:
+    st.link_button(
+        "Vendor Recommendation",
+        "https://vendor-recommendation-chatbot-jtmxjffyqsp4qxwtfu9dql.streamlit.app/",
+        use_container_width=True
+    )
 
 # ---- LOAD API KEY FROM SECRETS ----
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
